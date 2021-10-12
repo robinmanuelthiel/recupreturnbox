@@ -80,19 +80,19 @@ test:
 
 serve: ## Runs the app locally
 serve:
-	cd src &&  python3 main.py
+	cd app &&  python3 main.py
 
 build: ## Build docker image
 build:
-	docker build -t $(DOCKER_NAME) .
+	docker build -t $(DOCKER_NAME) -f Dockerfile .
 
 run: ## build, start and run docker image
 run: # remove
-	docker run --name $(DOCKER_NAME) --volume="$(current_dir)/src:/app" --env-file .docker.env -p 3000:80 $(DOCKER_NAME) /start-reload.sh
+	docker run --name $(DOCKER_NAME) --volume="$(current_dir)/app:/code/app" --env-file .docker.env -p 3000:80 $(DOCKER_NAME)
 
 run.d: ## build, start and run docker image
 run.d: # remove
-	docker run --name $(DOCKER_NAME) --volume="$(current_dir)/src:/app" --env-file .docker.env -d -p 3000:80 $(DOCKER_NAME) /start-reload.sh
+	docker run --name $(DOCKER_NAME) --volume="$(current_dir)/app:/code/app" --env-file .docker.env -d -p 3000:80 $(DOCKER_NAME)
 	@echo "Open browser http://localhost:8080/docs"
 
 exec: ## build, start and exec into docker image
