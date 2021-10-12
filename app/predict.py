@@ -102,7 +102,7 @@ def update_orientation(image):
     exif_orientation_tag = 0x0112
     if hasattr(image, "_getexif"):
         exif = image._getexif()
-        if exif != None and exif_orientation_tag in exif:
+        if exif is not None and exif_orientation_tag in exif:
             orientation = exif.get(exif_orientation_tag, 1)
             log_msg("Image has EXIF Orientation: " + str(orientation))
             # orientation is 1 based, shift to zero based and flip/transpose based on 0-based values
