@@ -9,7 +9,13 @@
           "settings": {
             "minDockerVersion": "v1.25",
             "loggingOptions": "",
-            "registryCredentials": {}
+            "registryCredentials": {
+              "recupreturnboxacr": {
+                "username": "$CONTAINER_REGISTRY_USERNAME_recupreturnboxacr",
+                "password": "$CONTAINER_REGISTRY_PASSWORD_recupreturnboxacr",
+                "address": "recupreturnboxacr.azurecr.io"
+              }
+            }
           }
         },
         "systemModules": {
@@ -50,13 +56,26 @@
             }
           }
         },
-        "modules": {}
+        "modules": {
+          "PredictModule": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.PredictModule}",
+              "createOptions": {}
+            }
+          }
+        }
       }
     },
     "$edgeHub": {
       "properties.desired": {
         "schemaVersion": "1.1",
-        "routes": {},
+        "routes": {
+          "PredictModuleToIoTHub": "FROM /messages/modules/PredictModule/outputs/* INTO $upstream"
+        },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
         }
