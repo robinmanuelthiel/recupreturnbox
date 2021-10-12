@@ -80,7 +80,7 @@ test:
 
 serve: ## Runs the app locally
 serve:
-	cd src &&  python3 app.py
+	cd src &&  python3 main.py
 
 build: ## Build docker image
 build:
