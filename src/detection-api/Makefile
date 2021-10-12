@@ -7,7 +7,7 @@ VENV_PATH=$(PWD)/env/bin/activate
 ENVIRONMENT_VARIABLE_FILE?=$(PWD)/.env
 
 
-DOCKER_NAME='prediction-api'
+DOCKER_NAME='detection-api'
 DOCKER_TAG?='1.0'
 LOGLEVEL?=WARNING
 
