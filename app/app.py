@@ -15,8 +15,8 @@ app = Flask(__name__)
 # 4MB Max image size limit
 app.config["MAX_CONTENT_LENGTH"] = 4 * 1024 * 1024
 
-# Default route just shows simple text
-@app.route("/")
+
+@app.route("/")  # Default route just shows simple text
 def index():
     return "CustomVision.ai model host harness"
 
