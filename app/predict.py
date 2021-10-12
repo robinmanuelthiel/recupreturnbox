@@ -235,10 +235,10 @@ def predict_image(image):
             resized_image, network_input_size, network_input_size
         )
 
-        tf.reset_default_graph()
+        tf.compat.v1.reset_default_graph()
         tf.import_graph_def(graph_def, name="")
 
-        with tf.Session() as sess:
+        with tf.compat.v1.Session() as sess:
             prob_tensor = sess.graph.get_tensor_by_name(output_layer)
             (predictions,) = sess.run(prob_tensor, {input_node: [cropped_image]})
 
