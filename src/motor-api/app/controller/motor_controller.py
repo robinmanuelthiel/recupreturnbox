@@ -1,7 +1,6 @@
-
 import logging
 
-from service.motor_service import MotorService
+from fastapi import FastAPI, HTTPException
 
 
 log = logging.getLogger(__name__)
@@ -10,10 +9,18 @@ log = logging.getLogger(__name__)
 class MotorController:
 
     def __init__(self):
-        self.service = MotorService()
+        try:
+            from service.motor_service import MotorService
+            self.service = MotorService()
+        except Exception  as error:
+            log.error(error)
+            raise HTTPException(status_code=500, detail=f'{error.__class__.__name__}')
 
-    def open(self):
+        
+
+    def motor_open(self):
         return self.service.motor_open()
 
-    def close(self):
+
+    def motor_close(self):
         return "close"

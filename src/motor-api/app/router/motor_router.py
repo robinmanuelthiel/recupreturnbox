@@ -11,7 +11,7 @@ async def get_open():
     """Opens the motor
     """
     controller = MotorController()
-    return controller.open()
+    return controller.motor_open()
 
 
 @router.get("/close", tags=["Motor"])
@@ -19,4 +19,4 @@ async def get_close():
     """Opens the motor
     """
     controller = MotorController()
-    return controller.close()
+    return controller.motor_close()
