@@ -2,7 +2,6 @@ import logging
 
 # API
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from starlette.responses import JSONResponse
 
@@ -17,7 +16,7 @@ config = DefaultConfig()
 tags_metadata = [
     {
         "name": "Health",
-        "description": "This API endpoint describes the status of the service.",
+        "description": "This API describes the status of the service.",
     }
 ]
 

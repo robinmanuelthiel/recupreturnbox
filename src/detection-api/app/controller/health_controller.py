@@ -5,6 +5,7 @@ from model.health_model import HealthResult
 
 log = logging.getLogger(__name__)
 
+
 class HealthStatus:
 
     def __init__(self, status=True):
@@ -20,4 +21,4 @@ class HealthController:
         self.healthStatus = HealthStatus()
 
     def check(self):
-        return HealthResult(status=self.healthStatus.status) 
+        return HealthResult(status=self.healthStatus.status)

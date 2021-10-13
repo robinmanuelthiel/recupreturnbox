@@ -18,4 +18,4 @@ RUN pip install -r requirements.txt --no-cache-dir --user
 
 ENV PATH="/home/api/.local/bin:${PATH}"
 
-COPY --chown=api:api src/ /app
+COPY --chown=api:api app/ /app
