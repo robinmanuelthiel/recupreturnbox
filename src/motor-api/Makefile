@@ -88,11 +88,11 @@ build:
 
 run: ## build, start and run docker image
 run: # remove
-	docker run --name $(DOCKER_NAME) --volume="$(current_dir)/app:/app" --env-file .docker.env -p 3000:80 $(DOCKER_NAME)
+	docker run --name $(DOCKER_NAME) --volume="$(current_dir)/app:/code/app" --env-file .docker.env -p 3000:80 $(DOCKER_NAME)
 
 run.d: ## build, start and run docker image
 run.d: # remove
-	docker run --name $(DOCKER_NAME) --volume="$(current_dir)/app:/app" --env-file .docker.env -d -p 3000:80 $(DOCKER_NAME)
+	docker run --name $(DOCKER_NAME) --volume="$(current_dir)/app:/code//app" --env-file .docker.env -d -p 3000:80 $(DOCKER_NAME)
 	@echo "Open browser http://localhost:8080/docs"
 
 exec: ## build, start and exec into docker image
