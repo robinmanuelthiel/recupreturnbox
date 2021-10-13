@@ -7,7 +7,7 @@ from RpiMotorLib import RpiMotorLib
 
 log = logging.getLogger(__name__)
 
-class MotorController:
+class MotorService:
 
     def __init__(self):
       # Back Left Motor
