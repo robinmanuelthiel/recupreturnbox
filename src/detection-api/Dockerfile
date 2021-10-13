@@ -9,6 +9,11 @@ USER api
 
 COPY --chown=api:api requirements.txt .
 
+# RUN apk add --update alpine-sdk
+
+# Fix for pip install RPi.GPIO on alpine
+ENV CFLAGS "-fcommon"
+
 RUN pip install -r requirements.txt --no-cache-dir --user
 
 ENV PATH="/home/api/.local/bin:${PATH}"
