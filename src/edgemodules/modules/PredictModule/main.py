@@ -2,24 +2,25 @@
 # Licensed under the MIT license. See LICENSE file in the project root for
 # full license information.
 
-import time
+import asyncio
 import os
 import sys
-import asyncio
-from six.moves import input
 import threading
-from azure.iot.device.aio import IoTHubModuleClient
+import time
 
+import ptvsd
+from azure.iot.device.aio import IoTHubModuleClient
 from PIL import Image
+from six.moves import input
+
+from predict import initialize, predict_image
+
+# FOR DEBUGGING
+ptvsd.enable_attach(("0.0.0.0", 5678))
 
 
 async def main():
     try:
-        if not sys.version >= "3.5.3":
-            raise Exception(
-                "The sample requires python 3.5.3+. Current version of Python: %s"
-                % sys.version
-            )
         print("IoT Hub Client for Python")
 
         # The client object is used to interact with your Azure IoT hub.
@@ -39,7 +40,20 @@ async def main():
                 print("custom properties are")
                 print(input_message.custom_properties)
                 print("forwarding mesage to output1")
-                await module_client.send_message_to_output(input_message, "output1")
+
+                # TODO: FIGURE OUT HOW TO CONVERT message.data to imageData
+                # imageData = None
+                # if "imageData" in request.files:
+                #     imageData = request.files["imageData"]
+                # elif "imageData" in request.form:
+                #     imageData = request.form["imageData"]
+                # else:
+                #     imageData = io.BytesIO(request.get_data())
+
+                img = Image.open(input_message.data)
+                results = predict_image(img)
+
+                await module_client.send_message_to_output(input_message, results)
 
         # define behavior for halting the application
         def stdin_listener():
@@ -76,9 +90,6 @@ async def main():
 
 
 if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
-    loop.close()
+    initialize()
 
-    # If using Python 3.7 or above, you can use following code instead:
-    # asyncio.run(main())
+    asyncio.run(main())
