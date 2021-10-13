@@ -13,7 +13,7 @@ class DefaultConfig:
     API_TASK = os.environ.get("API_TASK", "Detection API")
     API_TITLE = "Recup Retun Box - {} API".format(API_TASK)
     API_DESCRIPTION = ""
-    
+
     ROOT_PATH = os.environ.get("ROOT_PATH", "/")
 
     logging.basicConfig(level=os.environ.get("LOGLEVEL", "WARNING"))

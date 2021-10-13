@@ -1,7 +1,7 @@
 .EXPORT_ALL_VARIABLES:
 current_dir=$(shell pwd)
 
-SRC=$(PWD)/src
+SRC=$(PWD)/app
 
 VENV_PATH=$(PWD)/env/bin/activate
 ENVIRONMENT_VARIABLE_FILE?=$(PWD)/.env

@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 class MotorController:
 
     def __init__(self):
-        self.service = MotorService() 
+        self.service = MotorService()
 
     def open(self):
         return self.service.open()
