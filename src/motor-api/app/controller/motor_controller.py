@@ -13,7 +13,7 @@ class MotorController:
         self.service = MotorService()
 
     def open(self):
-        return self.service.open()
+        return self.service.motor_open()
 
     def close(self):
         return "close"
