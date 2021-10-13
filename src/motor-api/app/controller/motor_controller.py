@@ -23,4 +23,4 @@ class MotorController:
 
 
     def motor_close(self):
-        return "close"
+        return self.service.motor_close()
