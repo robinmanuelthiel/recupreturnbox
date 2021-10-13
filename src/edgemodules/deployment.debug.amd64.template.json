@@ -95,7 +95,21 @@
             "restartPolicy": "always",
             "settings": {
               "image": "${MODULES.RtspSimModule}",
-              "createOptions": {}
+              "createOptions": 
+              {
+                "HostConfig": {
+                    "Binds": [
+                        "/home/localedgeuser/samples/input:/live/mediaServer/media"
+                    ],
+                   "PortBindings": {
+                        "554/tcp": [
+                            {
+                                "HostPort": "5001"
+                            }
+                        ]
+                   }
+                }
+             }
             }
           }
         }
