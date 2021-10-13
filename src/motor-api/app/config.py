@@ -10,7 +10,7 @@ class DefaultConfig:
     LOCAL_DEV = os.environ.get("LOCAL_DEV", False)
 
     # API Description
-    API_TASK = os.environ.get("API_TASK", "Detection API")
+    API_TASK = os.environ.get("API_TASK", "Motor API")
     API_TITLE = "Recup Retun Box - {} API".format(API_TASK)
     API_DESCRIPTION = ""
 
