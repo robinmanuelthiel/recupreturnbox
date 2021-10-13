@@ -12,7 +12,7 @@ import ptvsd
 from azure.iot.device.aio import IoTHubModuleClient
 from PIL import Image
 from six.moves import input
-
+import datetime
 from predict import initialize, predict_image
 
 # FOR DEBUGGING
@@ -50,10 +50,31 @@ async def main():
                 # else:
                 #     imageData = io.BytesIO(request.get_data())
 
-                img = Image.open(input_message.data)
-                results = predict_image(img)
+                # img = Image.open(input_message.data)
+                # results = predict_image(img)
 
-                await module_client.send_message_to_output(input_message, results)
+                dummy_results = {
+                    "id": "",
+                    "project": "Dummy Response",
+                    "iteration": "",
+                    "created": datetime.utcnow().isoformat(),
+                    "predictions": [
+                        {
+                            "tagName": "recup",
+                            "probability": 0.95,
+                            "tagId": "",
+                            "boundingBox": None,
+                        },
+                        {
+                            "tagName": "Negative",
+                            "probability": 0.95,
+                            "tagId": "",
+                            "boundingBox": None,
+                        },
+                    ],
+                }
+
+                await module_client.send_message_to_output(input_message, dummy_results)
 
         # define behavior for halting the application
         def stdin_listener():
