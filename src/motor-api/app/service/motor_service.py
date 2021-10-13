@@ -1,6 +1,7 @@
 from multiprocessing import Process
 from time import sleep
 import logging
+from config import DefaultConfig
 
 from RpiMotorLib import RpiMotorLib
 
@@ -9,110 +10,59 @@ log = logging.getLogger(__name__)
 
 class MotorService:
 
-    def __init__(self):
+    def __init__(self, config=DefaultConfig):
         # Back Left Motor
-        self.pinsBackLeft = [21, 20, 16, 12]
-        self.motorBackLeft = RpiMotorLib.BYJMotor("motorBackLeft", "28BYJ")
-
-        # Back Right Motor
-        self. pinsBackRight = [26, 19, 13, 6]
-        self.motorBackRight = RpiMotorLib.BYJMotor("motorBackRight", "28BYJ")
-
-        # Front Left Motor
-        self.pinsFrontLeft = [5, 11, 9, 10]
-        self.motorFrontLeft = RpiMotorLib.BYJMotor("motorFrontLeft", "28BYJ")
-
-        # Front Right Motor
-        self.pinsFrontRight = [14, 15, 18, 23]
-        self.motorFrontRight = RpiMotorLib.BYJMotor("motorFrontRight", "28BYJ")
+        self.pinsPrimaryMotor = [
+            config.MOTOR1.pin1,
+            config.MOTOR1.pin2,
+            config.MOTOR1.pin3,
+            config.MOTOR1.pin4]
+        self.primaryMotor = RpiMotorLib.BYJMotor("motorPrimary", "28BYJ")
 
         self.motor_startup()
 
     def motor_startup(self):
-        backLeftMotorProcess = Process(
-            target=self.rotateMotor,
+        primaryMotorProcess = Process(
+            target=self.motor_move,
             args=(
-                self.motorBackLeft, self.pinsBackLeft, False, 15,)
+                self.primaryMotor, self.pinsBackLeft, False, 15,)
         )
-        backRightMotorProcess = Process(
-            target=self.rotateMotor,
-            args=(
-                self.motorBackRight, self.pinsBackRight, True, 15,)
-        )
-        frontLeftMotorProcess = Process(
-            target=self.rotateMotor,
-            args=(
-                self.motorFrontLeft, self.pinsFrontLeft, True, 15,)
-        )
-        frontRightMotorProcess = Process(
-            target=self.rotateMotor,
-            args=(
-                self.motorFrontRight, self.pinsFrontRight, False, 15,)
-        )
-        backLeftMotorProcess.start()
-        backRightMotorProcess.start()
+        primaryMotorProcess.start()
         sleep(.05)
-        frontLeftMotorProcess.start()
-        frontRightMotorProcess.start()
-        backLeftMotorProcess.join()
-        backRightMotorProcess.join()
-        frontLeftMotorProcess.join()
-        frontRightMotorProcess.join()
+        primaryMotorProcess.join()
 
-    def motor_rotate(self, motor, pins, isClockwise, offset):
+    def motor_move(self, motor, pins, isClockwise, offset):
         motor.motor_run(pins, .001, offset, isClockwise, False, "half", .05)
 
     def motor_close(self):
-        backLeftMotorProcess = Process(
-            target=self.rotateMotor,
-            args=(self.motorBackLeft, self.pinsBackLeft, False, 135,)
+        primaryMotorProcess = Process(
+            target=self.motor_move,
+            args=(self.primaryMotor, self.pinsPrimaryMotor, False, 128,)
         )
-        backRightMotorProcess = Process(
-            target=self.rotateMotor,
-            args=(self.motorBackRight, self.pinsBackRight, True, 135,)
-        )
-        frontLeftMotorProcess = Process(
-            target=self.rotateMotor,
-            args=(self.otorFrontLeft, self.pinsFrontLeft, True, 135,)
-        )
-        frontRightMotorProcess = Process(
-            target=self.rotateMotor,
-            args=(self.motorFrontRight, self.pinsFrontRight, False, 135,)
-        )
-        backLeftMotorProcess.start()
-        backRightMotorProcess.start()
+        primaryMotorProcess.start()
         sleep(.05)
-        frontLeftMotorProcess.start()
-        frontRightMotorProcess.start()
-        backLeftMotorProcess.join()
-        backRightMotorProcess.join()
-        frontLeftMotorProcess.join()
-        frontRightMotorProcess.join()
+        primaryMotorProcess.join()
 
     def motor_open(self):
-        backLeftMotorProcess = Process(
-            target=self.rotateMotor,
-            args=(self.motorBackLeft, self.pinsBackLeft, True, 128,)
-        )
-        backRightMotorProcess = Process(
-            target=self.rotateMotor,
-            args=(self.motorBackRight, self.pinsBackRight, False, 128,)
-        )
-        frontLeftMotorProcess = Process(
-            target=self.rotateMotor,
-            args=(self.motorFrontLeft, self.pinsFrontLeft, False, 128,)
-        )
-        frontRightMotorProcess = Process(
-            target=self.rotateMotor,
-            args=(self.motorFrontRight, self.pinsFrontRight, True, 128)
+        primaryMotorProcess = Process(
+            target=self.motor_move,
+            args=(self.primaryMotor, self.pinsPrimaryMotor, True, 128,)
         )
 
-        frontLeftMotorProcess.start()
-        frontRightMotorProcess.start()
+        primaryMotorProcess.start()
         sleep(.05)
-        backLeftMotorProcess.start()
-        backRightMotorProcess.start()
-        backLeftMotorProcess.join()
-        backRightMotorProcess.join()
-        frontLeftMotorProcess.join()
-        frontRightMotorProcess.join()
+        primaryMotorProcess.join()
+
+    def motor_rotate(self, rotation_offset):
+        primaryMotorProcess = Process(
+            target=self.motor_move,
+            args=(
+                self.primaryMotor,
+                self.pinsPrimaryMotor,
+                True,
+                rotation_offset)
+        )
+
+        primaryMotorProcess.start()
+        sleep(.05)
+        primaryMotorProcess.join()

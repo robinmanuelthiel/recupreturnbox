@@ -23,3 +23,6 @@ class MotorController:
 
     def motor_close(self):
         return self.service.motor_close()
+
+    def motor_rotate(self, rotation_offset):
+        return self.service.motor_rotate(rotation_offset)

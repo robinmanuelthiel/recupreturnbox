@@ -20,3 +20,11 @@ async def get_close():
     """
     controller = MotorController()
     return controller.motor_close()
+
+
+@router.post("/rotate", tags=["Motor"])
+async def post_rotate(rotation_offset):
+    """Rotates the motor
+    """
+    controller = MotorController()
+    return controller.motor_rotate(rotation_offset)
