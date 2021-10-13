@@ -1,0 +1,121 @@
+{
+  "$schema-template": "4.0.0",
+  "modulesContent": {
+    "$edgeAgent": {
+      "properties.desired": {
+        "schemaVersion": "1.1",
+        "runtime": {
+          "type": "docker",
+          "settings": {
+            "minDockerVersion": "v1.25",
+            "loggingOptions": "",
+            "registryCredentials": {
+              "recupreturnboxacr": {
+                "username": "$CONTAINER_REGISTRY_USERNAME_recupreturnboxacr",
+                "password": "$CONTAINER_REGISTRY_PASSWORD_recupreturnboxacr",
+                "address": "recupreturnboxacr.azurecr.io"
+              }
+            }
+          }
+        },
+        "systemModules": {
+          "edgeAgent": {
+            "type": "docker",
+            "settings": {
+              "image": "mcr.microsoft.com/azureiotedge-agent:1.2",
+              "createOptions": {}
+            }
+          },
+          "edgeHub": {
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "mcr.microsoft.com/azureiotedge-hub:1.2",
+              "createOptions": {
+                "HostConfig": {
+                  "PortBindings": {
+                    "5671/tcp": [
+                      {
+                        "HostPort": "5671"
+                      }
+                    ],
+                    "8883/tcp": [
+                      {
+                        "HostPort": "8883"
+                      }
+                    ],
+                    "443/tcp": [
+                      {
+                        "HostPort": "443"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "modules": {
+          "PredictModule": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.PredictModule}",
+              "createOptions": {}
+            }
+          },
+          "AzureVideoAnalyzerEdge": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "mcr.microsoft.com/media/video-analyzer:1",
+              "createOptions": {
+                "HostConfig": {
+                  "LogConfig": {
+                    "Type": "",
+                    "Config": {
+                      "max-size": "10m",
+                      "max-file": "10"
+                    }
+                  },
+                  "Binds": []
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "$edgeHub": {
+      "properties.desired": {
+        "schemaVersion": "1.1",
+        "routes": {
+          "PredictModuleToIoTHub": "FROM /messages/modules/PredictModule/outputs/* INTO $upstream",
+          "AzureVideoAnalyzerEdgeToIoTHub": "FROM /messages/modules/AzureVideoAnalyzerEdge/outputs/* INTO $upstream"
+        },
+        "storeAndForwardConfiguration": {
+          "timeToLiveSecs": 7200
+        }
+      }
+    },
+    "AzureVideoAnalyzerEdge": {
+      "properties.desired": {
+          
+        "ProvisioningToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6InNmVkRoUzYtNkNLcjZnUkg2cDd0RWhxRUpNZyIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhenVyZXZpZGVvYW5hbHl6ZXIiLCJhdWQiOlsiaHR0cHM6Ly9hM2RmNmEzYmE2OWQ0NWQxOGY5ZTk2YzNmZTJhZmJmNy5lZGdlYXBpLndlc3RldXJvcGUudmlkZW9hbmFseXplci5henVyZS5uZXQvZWRnZU1vZHVsZXMvYXp1cmV2aWRlb2FuYWx5emVyIl0sImV4cCI6MTYzNDIwNDM2NCwidG9rZW5UeXBlIjoiUHJvdmlzaW9uaW5nVG9rZW4iLCJtb2R1bGVBcm1JZCI6Ii9zdWJzY3JpcHRpb25zLzFkNjBlNDhiLWY1OGItNGUyNC1hMWM4LTVlY2JjMjZlZWE3Yi9yZXNvdXJjZUdyb3Vwcy9yZy1SZWN1cFJldHVybkJveC9wcm92aWRlcnMvTWljcm9zb2Z0Lk1lZGlhL3ZpZGVvQW5hbHl6ZXJzL3JlY3VwdmlkZW9hbmFseXplci9lZGdlTW9kdWxlcy9henVyZXZpZGVvYW5hbHl6ZXIiLCJtb2R1bGVJZCI6IjA0MTY3ZDk4LTQ1MzAtNDdjYS1hMTNmLTNmMGYyYjRhNjBiOCIsImlzcyI6Imh0dHBzOi8vd2VzdGV1cm9wZS52aWRlb2FuYWx5emVyLmF6dXJlLm5ldC8ifQ.PqKKzzdBaE0bRe1ilhvw8CsUt5tBIPPjHFmy7D6Vgd-MnrmObO8HLJryRcZOHss67KRrQBanA4IIjq-fmW7vlBkSxoSIsBvvss-cY1U10ryjjpnXjQpkk_bW5Dyrs303R2fK_Vg4VdT3iDj_nxQRadWHsQOfIiq5WjWtUCyhWLb7Cd10zT1xbqB2a5640abbmfXVS6P4b59nagnOhIHD29W6mMUUsRWnfqobMivjTFqKTUA8Pnx0fQFzNNPGcJbM0rZfUCqyNJ9aNAqmbxLN9htRBbJsCy960DiHfTO3UMoQQ3SR9UXCnAXpmLOEjTqCsE_jBWJj-nRxhqOiRj4ORg",
+        "ApplicationDataDirectory": "/var/lib/videoanalyzer",
+        "DiagnosticsEventsOutputName": "diagnostics",
+        "OperationalEventsOutputName": "operational",
+        "LogLevel": "Information",
+        "LogCategories": "Application,Events",
+        "AllowUnsecuredEndpoints": true,
+        "TelemetryOptOut": false
+
+      }
+    }
+  }
+}
