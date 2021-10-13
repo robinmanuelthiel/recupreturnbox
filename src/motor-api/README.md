@@ -17,7 +17,7 @@ make serve
 
 ## Docker
 
-Create a .docker.env file for the docker. Get secrets from KeyVault:fahrzeugschein/env-file-docker via make secrets -> remove export and &&, one variable on a new line.
+Create a .docker.env file for the docker.
 
 ```bash
 # Make sure .docker.env is present
