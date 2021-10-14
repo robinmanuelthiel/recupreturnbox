@@ -13,7 +13,7 @@ import time
 from azure.iot.device.aio import IoTHubModuleClient
 from six.moves import input
 
-from app.predict import initialize, predict_image
+from predict import initialize, predict_image
 
 # FOR DEBUGGING
 try:
