@@ -67,25 +67,14 @@
               "createOptions": {}
             }
           },
-          "AzureVideoAnalyzerEdge": {
+          "CaptureCameraModule": {
             "version": "1.0",
             "type": "docker",
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "mcr.microsoft.com/media/video-analyzer:1",
-              "createOptions": {
-                "HostConfig": {
-                  "LogConfig": {
-                    "Type": "",
-                    "Config": {
-                      "max-size": "10m",
-                      "max-file": "10"
-                    }
-                  },
-                  "Binds": []
-                }
-              }
+              "image": "${MODULES.CaptureCameraModule.arm32v7}",
+              "createOptions": "{\"Env\":[\"CONNECTION_STRING=HostName=RecupReturnBox-iothub.azure-devices.net;DeviceId=recup-raspbi;SharedAccessKey=rJ/DThV1Sskw3DiSVzu9SjY7xgmNKuJKc9gIl0OMaF0=\",\"VIDEO_PATH=./AppleAndBanana.mp4\",\"IMAGE_PROCESSING_ENDPOINT=http://custom-vision-service:80/image\", \"IMAGE_PROCESSING_PARAMS=\", \"SHOW_VIDEO=FALSE\", \"VERBOSE=TRUE\", \"RESIZE_WIDTH=256\", \"RESIZE_HEIGHT=456\", \"LOOP_VIDEO=FALSE\"]}"
             }
           },
           "CustomVisionPrediction": {
@@ -97,6 +86,17 @@
               "image": "${MODULES.CustomVisionPrediction}",
               "createOptions": {}
             }
+          },
+
+          "custom-vision-service": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "localhost:5000/custom-vision:latest",
+              "createOptions": ""
+            }
           }
         }
       }
@@ -107,7 +107,8 @@
         "routes": {
           "PredictModuleToIoTHub": "FROM /messages/modules/PredictModule/outputs/* INTO $upstream",
           "AzureVideoAnalyzerEdgeToIoTHub": "FROM /messages/modules/AzureVideoAnalyzerEdge/outputs/* INTO $upstream",
-          "CustomVisionPredictionToIoTHub": "FROM /messages/modules/CustomVisionPrediction/outputs/* INTO $upstream"
+          "CustomVisionPredictionToIoTHub": "FROM /messages/modules/CustomVisionPrediction/outputs/* INTO $upstream",
+          "CaptureCameraToIoTHub": "FROM /messages/modules/CaptureCameraModule/outputs/output1 INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
