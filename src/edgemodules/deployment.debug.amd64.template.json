@@ -57,16 +57,6 @@
           }
         },
         "modules": {
-          "PredictModule": {
-            "version": "1.0",
-            "type": "docker",
-            "status": "running",
-            "restartPolicy": "always",
-            "settings": {
-              "image": "${MODULES.PredictModule}",
-              "createOptions": {}
-            }
-          },
           "AzureVideoAnalyzerEdge": {
             "version": "1.0",
             "type": "docker",
@@ -142,7 +132,6 @@
       "properties.desired": {
         "schemaVersion": "1.1",
         "routes": {
-          "PredictModuleToIoTHub": "FROM /messages/modules/PredictModule/outputs/* INTO $upstream",
           "AzureVideoAnalyzerEdgeToIoTHub": "FROM /messages/modules/AzureVideoAnalyzerEdge/outputs/* INTO $upstream",
           "CaptureCameraModuleToIoTHub": "FROM /messages/modules/CaptureCameraModule/outputs/* INTO $upstream",
           "CustomVisionPredictionToIoTHub": "FROM /messages/modules/CustomVisionPrediction/outputs/* INTO $upstream"
