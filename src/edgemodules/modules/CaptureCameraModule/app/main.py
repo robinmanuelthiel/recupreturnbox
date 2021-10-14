@@ -52,7 +52,7 @@ class HubManager(object):
         self.client.set_option("messageTimeout", self.messageTimeout)
         if verbose:
             self.client.set_option("logtrace", 1)#enables MQTT logging
-        self.set_certificates()# some embedded platforms need certificate information
+        #self.set_certificates()# some embedded platforms need certificate information
 
     def set_certificates(self):
         isWindows = sys.platform.lower() in ['windows', 'win32']
