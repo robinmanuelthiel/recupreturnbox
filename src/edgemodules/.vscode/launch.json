@@ -2,43 +2,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "PredictModule Remote Debug (Python)",
-      "type": "python",
-      "request": "attach",
-      "port": 5678,
-      "host": "52.233.178.129",
-      "logToFile": true,
-      "redirectOutput": true,
-      "pathMappings": [
-        {
-          "localRoot": "${workspaceFolder}/modules/PredictModule",
-          "remoteRoot": "/app"
-        }
-      ],
-      "windows": {
-        "pathMappings": [
-          {
-            "localRoot": "${workspaceFolder}\\modules\\PredictModule",
-            "remoteRoot": "/app"
-          }
-        ]
-      }
-    },
-    {
-      "name": "PredictModule Local Debug (Python)",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/modules/PredictModule/main.py",
-      "console": "integratedTerminal",
-      "env": {
-        "EdgeHubConnectionString": "${config:azure-iot-edge.EdgeHubConnectionString}",
-        "EdgeModuleCACertificateFile": "${config:azure-iot-edge.EdgeModuleCACertificateFile}"
-      },
-      "windows": {
-        "program": "${workspaceFolder}\\modules\\PredictModule\\main.py"
-      }
-    },
-    {
       "name": "RtspSimModule Remote Debug (Python)",
       "type": "python",
       "request": "attach",
@@ -116,7 +79,7 @@
       "name": "CustomVisionPrediction Remote Debug (Python)",
       "type": "python",
       "request": "attach",
-      "port": 5678,
+      "port": 5679,
       "host": "52.233.178.129",
       "logToFile": true,
       "redirectOutput": true,

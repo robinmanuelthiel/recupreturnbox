@@ -19,12 +19,15 @@ from predict import initialize, predict_image
 try:
     import ptvsd
 
-    ptvsd.enable_attach(("0.0.0.0", 5678))
+    ptvsd.enable_attach(("0.0.0.0", 5679))
+
 except ImportError:
     pass
 
 
 async def main():
+    ptvsd.break_into_debugger()
+
     try:
         if not sys.version >= "3.5.3":
             raise Exception(
