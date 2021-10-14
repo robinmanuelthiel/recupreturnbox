@@ -84,7 +84,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "${MODULES.CustomVisionPrediction}",
+              "image": "${MODULES.CustomVisionPrediction.debug}",
               "createOptions": {}
             }
           },
