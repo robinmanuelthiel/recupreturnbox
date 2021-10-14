@@ -95,21 +95,34 @@
             "restartPolicy": "always",
             "settings": {
               "image": "${MODULES.RtspSimModule}",
-              "createOptions": 
-              {
+              "createOptions": {
+                "Config": {
+                  "max-size": "10m",
+                  "max-file": "10"
+                },
                 "HostConfig": {
-                    "Binds": [
-                        "/home/localedgeuser/samples/input:/live/mediaServer/media"
-                    ],
-                   "PortBindings": {
-                        "554/tcp": [
-                            {
-                                "HostPort": "5001"
-                            }
-                        ]
-                   }
+                  "Binds": [
+                    "/home/localedgeuser/samples/input:/live/mediaServer/media"
+                  ],
+                  "PortBindings": {
+                    "554/tcp": [
+                      {
+                        "HostPort": "5001"
+                      }
+                    ]
+                  }
                 }
-             }
+              }
+            }
+          },
+          "CaptureCameraModule": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.CaptureCameraModule}",
+              "createOptions": {}
             }
           }
         }
@@ -121,7 +134,7 @@
         "routes": {
           "PredictModuleToIoTHub": "FROM /messages/modules/PredictModule/outputs/* INTO $upstream",
           "AzureVideoAnalyzerEdgeToIoTHub": "FROM /messages/modules/AzureVideoAnalyzerEdge/outputs/* INTO $upstream",
-          "RtspSimModuleToIoTHub": "FROM /messages/modules/RtspSimModule/outputs/* INTO $upstream"
+          "CaptureCameraModuleToIoTHub": "FROM /messages/modules/CaptureCameraModule/outputs/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
