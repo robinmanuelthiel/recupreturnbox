@@ -88,6 +88,15 @@
               }
             }
           },
+          "CustomVisionPrediction": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.CustomVisionPrediction}",
+              "createOptions": {}
+            },
           "RtspSimModule": {
             "version": "1.0",
             "type": "docker",
@@ -121,7 +130,8 @@
         "routes": {
           "PredictModuleToIoTHub": "FROM /messages/modules/PredictModule/outputs/* INTO $upstream",
           "AzureVideoAnalyzerEdgeToIoTHub": "FROM /messages/modules/AzureVideoAnalyzerEdge/outputs/* INTO $upstream",
-          "RtspSimModuleToIoTHub": "FROM /messages/modules/RtspSimModule/outputs/* INTO $upstream"
+          "RtspSimModuleToIoTHub": "FROM /messages/modules/RtspSimModule/outputs/* INTO $upstream",
+          "CustomVisionPredictionToIoTHub": "FROM /messages/modules/CustomVisionPrediction/outputs/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200

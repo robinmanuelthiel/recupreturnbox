@@ -111,6 +111,43 @@
       "windows": {
         "program": "${workspaceFolder}\\modules\\usbtortspmodule\\main.py"
       }
+    },
+    {
+      "name": "CustomVisionPrediction Remote Debug (Python)",
+      "type": "python",
+      "request": "attach",
+      "port": 5678,
+      "host": "52.233.178.129",
+      "logToFile": true,
+      "redirectOutput": true,
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/modules/CustomVisionPrediction",
+          "remoteRoot": "/app"
+        }
+      ],
+      "windows": {
+        "pathMappings": [
+          {
+            "localRoot": "${workspaceFolder}\\modules\\CustomVisionPrediction",
+            "remoteRoot": "/app"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CustomVisionPrediction Local Debug (Python)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/modules/CustomVisionPrediction/main.py",
+      "console": "integratedTerminal",
+      "env": {
+        "EdgeHubConnectionString": "${config:azure-iot-edge.EdgeHubConnectionString}",
+        "EdgeModuleCACertificateFile": "${config:azure-iot-edge.EdgeModuleCACertificateFile}"
+      },
+      "windows": {
+        "program": "${workspaceFolder}\\modules\\CustomVisionPrediction\\main.py"
+      }
     }
   ]
 }
