@@ -8,7 +8,6 @@ import sys
 import threading
 import time
 
-import ptvsd
 from azure.iot.device.aio import IoTHubModuleClient
 from PIL import Image
 from six.moves import input
@@ -16,7 +15,12 @@ import datetime
 from predict import initialize, predict_image
 
 # FOR DEBUGGING
-ptvsd.enable_attach(("0.0.0.0", 5678))
+try:
+    import ptvsd
+
+    ptvsd.enable_attach(("0.0.0.0", 5678))
+except ImportError:
+    pass
 
 
 async def main():
@@ -67,7 +71,7 @@ async def main():
                         },
                         {
                             "tagName": "Negative",
-                            "probability": 0.95,
+                            "probability": 0.05,
                             "tagId": "",
                             "boundingBox": None,
                         },
