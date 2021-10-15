@@ -74,7 +74,20 @@
             "restartPolicy": "always",
             "settings": {
               "image": "${MODULES.CustomVisionPrediction.debug}",
-              "createOptions": {}
+              "createOptions": {
+                "ExposedPorts": {
+                  "5678/tcp": {}
+                },
+                "HostConfig": {
+                  "PortBindings": {
+                    "5678/tcp": [
+                      {
+                        "HostPort": "5678"
+                      }
+                    ]
+                  }
+                }
+              }
             }
           },
           "custom-vision-service": {
