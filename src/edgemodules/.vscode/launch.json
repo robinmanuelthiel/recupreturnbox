@@ -79,7 +79,7 @@
       "name": "CustomVisionPrediction Remote Debug (Python)",
       "type": "python",
       "request": "attach",
-      "port": 5679,
+      "port": 5678,
       "host": "52.233.178.129",
       "logToFile": true,
       "redirectOutput": true,

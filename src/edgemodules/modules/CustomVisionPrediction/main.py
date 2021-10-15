@@ -16,13 +16,13 @@ from six.moves import input
 from predict import initialize, predict_image
 
 # FOR DEBUGGING
-try:
-    import ptvsd
+# try:
+import ptvsd
 
-    ptvsd.enable_attach(("0.0.0.0", 5679))
+ptvsd.enable_attach(("0.0.0.0", 5678))
 
-except ImportError:
-    pass
+# except ImportError:
+#     pass
 
 
 async def main():
