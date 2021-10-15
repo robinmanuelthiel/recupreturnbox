@@ -2,15 +2,18 @@
     "$schema-version": "0.0.1",
     "description": "",
     "image": {
-        "repository": "recupreturnboxacr.azurecr.io/cameracapture",
+        "repository": "recupreturnboxacr.azurecr.io/capturecameramodule",
         "tag": {
-            "version": "0.0.2",
+            "version": "0.0.1",
             "platforms": {
                 "amd64": "./amd64.Dockerfile",
                 "arm32v7": "./arm32v7.Dockerfile",
-                "test-arm32v7": "./test/test-arm32v7.Dockerfile"
+                "test-arm32v7": "./test-arm32v7.Dockerfile",
+                "test-amd64": "./test-amd64.Dockerfile"
             }
-        }
+        },
+        "buildOptions": []
     },
+    
     "language": "python"
 }

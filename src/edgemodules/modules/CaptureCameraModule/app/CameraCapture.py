@@ -9,6 +9,9 @@ if sys.version_info[0] < 3:#e.g python version <3
 else:
     import cv2
     from cv2 import cv2
+# pylint: disable=E1101
+# pylint: disable=E0401
+# Disabling linting that is not supported by Pylint for C extensions such as OpenCV. See issue https://github.com/PyCQA/pylint/issues/1955 
 import numpy
 import requests
 import json
@@ -18,8 +21,8 @@ import VideoStream
 from VideoStream import VideoStream
 import AnnotationParser
 from AnnotationParser import AnnotationParser
-
-
+import ImageServer
+from ImageServer import ImageServer
 
 class CameraCapture(object):
 
@@ -84,6 +87,11 @@ class CameraCapture(object):
             print("   - Annotate: " + str(self.annotate))
             print("   - Send processing results to hub: " + str(self.sendToHubCallback is not None))
             print()
+        
+        self.displayFrame = None
+        if self.showVideo:
+            self.imageServer = ImageServer(5012, self)
+            self.imageServer.start()
 
     def __annotate(self, frame, response):
         AnnotationParserInstance = AnnotationParser()
@@ -95,7 +103,12 @@ class CameraCapture(object):
 
     def __sendFrameForProcessing(self, frame):
         headers = {'Content-Type': 'application/octet-stream'}
-        response = requests.post(self.imageProcessingEndpoint, headers = headers, params = self.imageProcessingParams, data = frame)
+        try:
+            response = requests.post(self.imageProcessingEndpoint, headers = headers, params = self.imageProcessingParams, data = frame)
+        except Exception as e:
+            print('__sendFrameForProcessing Excpetion -' + str(e))
+            return "[]"
+
         if self.verbose:
             try:
                 print("Response from external processing service: (" + str(response.status_code) + ") " + json.dumps(response.json()))
@@ -113,9 +126,12 @@ class CameraCapture(object):
             time.sleep(1.0)#needed to load at least one frame into the VideoStream class
             #self.capture = cv2.VideoCapture(int(self.videoPath))
         else:
-            #In the case of a video file, we want to analyze all the frames fo the video thus are not using VideoStream class
+            #In the case of a video file, we want to analyze all the frames of the video thus are not using VideoStream class
             self.capture = cv2.VideoCapture(self.videoPath)
         return self
+
+    def get_display_frame(self):
+        return self.displayFrame
 
     def start(self):
         frameCounter = 0
@@ -187,7 +203,7 @@ class CameraCapture(object):
                 if self.verbose:
                     print("Time to process frame externally: " + self.__displayTimeDifferenceInMs(time.time(), startProcessingExternally))
                     startSendingToEdgeHub = time.time()
-                
+
                 #forwarding outcome of external processing to the EdgeHub
                 if response != "[]" and self.sendToHubCallback is not None:
                     self.sendToHubCallback(response)
@@ -204,16 +220,17 @@ class CameraCapture(object):
                         if self.annotate:
                             #TODO: fix bug with annotate function
                             self.__annotate(frame, response)
-                        cv2.imshow('frame', frame)
+                        self.displayFrame = cv2.imencode('.jpg', frame)[1].tobytes()
                     else:
                         if self.verbose and (perfForOneFrameInMs is not None):
                             cv2.putText(preprocessedFrame, "FPS " + str(round(1000/perfForOneFrameInMs, 2)),(10, 35),cv2.FONT_HERSHEY_SIMPLEX,1.0,(0,0,255), 2)
                         if self.annotate:
                             #TODO: fix bug with annotate function
                             self.__annotate(preprocessedFrame, response)
-                        cv2.imshow('frame', preprocessedFrame)
-                except Exception:
-                    print("Could not display the video to an X server. Fix the X server or turn off showing video.") 
+                        self.displayFrame = cv2.imencode('.jpg', preprocessedFrame)[1].tobytes()
+                except Exception as e:
+                    print("Could not display the video to a web browser.") 
+                    print('Excpetion -' + str(e))
                 if self.verbose:
                     if 'startDisplaying' in locals():
                         print("Time to display frame: " + self.__displayTimeDifferenceInMs(time.time(), startDisplaying))
@@ -236,4 +253,5 @@ class CameraCapture(object):
         if not self.isWebcam:
             self.capture.release()
         if self.showVideo:
+            self.imageServer.close()
             cv2.destroyAllWindows()

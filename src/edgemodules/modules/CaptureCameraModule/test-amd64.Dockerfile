@@ -16,7 +16,7 @@ RUN apt-get update && \
 # Install Python packages
 COPY /build/amd64-requirements.txt ./
 RUN pip3 install --upgrade pip
-RUN pip3 install --upgrade setuptools
+RUN pip3 install --upgrade setuptools 
 RUN pip3 install -r amd64-requirements.txt
 
 # Cleanup
@@ -24,8 +24,10 @@ RUN rm -rf /var/lib/apt/lists/* \
     && apt-get -y autoremove
 
 ADD /app/ .
+ADD /test/ .
 
 # Expose the port
 EXPOSE 5012
 
+#Manually run the main.py or test other functions
 ENTRYPOINT [ "python3", "-u", "./main.py" ]
