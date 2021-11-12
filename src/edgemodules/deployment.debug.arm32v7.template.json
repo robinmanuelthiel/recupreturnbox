@@ -73,7 +73,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "${MODULES.CustomVisionPrediction.debug}",
+              "image": "${MODULES.CustomVisionPrediction-arm32v7.debug}",
               "createOptions": {
                 "ExposedPorts": {
                   "5678/tcp": {}
